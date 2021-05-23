@@ -2,7 +2,7 @@ package com.yavel;
 
 /**
  * Notes:
- * 1. The only thing that should be static in here is main().
+ * 1. The only thing that should be static in here is main(). for school i always did static so it was kinda a habit.
  * 2. Renamed to Board because that is what it is.
  * 3. Move the constructor to the top.  It should always be first after the members.
  * 4. Changed a lot of your get() calls to just use the internal board with b[r][c]
@@ -66,14 +66,15 @@ public class Board {
         Board futureBoard = new Board(rows, cols);
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                if (b[r][c] == 1 && countNeighbors(r, c) < 2) //countNeighbors is going to be implemented later as a method
+                int count = countNeighbors(r,c);
+                if (b[r][c] == 1 && count < 2) //countNeighbors is going to be implemented later as a method
                 {
                     futureBoard.set(r, c, 0);//underpopulation and dies
-                } else if (b[r][c] == 1 && countNeighbors(r, c) < 4) {
+                } else if (b[r][c] == 1 && count < 4) {
                     futureBoard.set(r, c, 1);//perfect population and lives
-                } else if (b[r][c] == 1 && countNeighbors(r, c) > 3) {
+                } else if (b[r][c] == 1 && count > 3) {
                     futureBoard.set(r, c, 0);//overpopulation and dies
-                } else if (b[r][c] == 0 && countNeighbors(r, c) == 3) {
+                } else if (b[r][c] == 0 && count == 3) {
                     futureBoard.set(r, c, 1);//migration from other cells and becomes alive
                 }
             }
@@ -88,17 +89,23 @@ public class Board {
     //    row-1, col
     //    row-1, col+1
     //    row, col-1
+    //    row, col   // skip
     //    row, col+1
     //    row+1, col-1
     //    row+1, col
     //    row+1, col+1
+    //    if ( 
     // Do it without a loop.  The trick is using if statements to make sure you don't go out of bounds.
-    // Get it working and add in loops.
+    // Get it working and add in loops. am I getting an out of bounds error while trying to check it right now?
     public int countNeighbors(int row, int col) {
         int count = 0;
-        for (int r = row - 1; row <= row + 1; r++) {
+        for (int r = row - 1; r <= row + 1; r++) {
             for (int c = col - 1; c <= col + 1; c++) {
-                if (r >= 0 && r < rows && c >= 0 && c < cols && !(r == row && c == col) && b[r][c] == 1) {
+                if (r >= 0 && r < rows && //to stay inside the board in rows
+                        c >= 0 && c < cols && //to stay inside the board for cols
+                        !(r == row && c == col) && //if it is not the main cell
+                        b[r][c] == 1) //if the cell is alive or dead
+                {
                     count++;
                 }
             }
@@ -130,11 +137,26 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board board = new Board(10, 10);
+        Board board = new Board(5, 5);
+        board.initialize();
+       /* Board b = new Board(3,3);
+        b.set(0,0, 1);
+        b.set(0, 1, 1);
+        b.set(0, 2, 1);
+
+        b.set(1,0, 1);
+        b.set(1, 1, 1);
+        b.set(1, 2, 1);
+
+        b.set(2,0, 1);
+        b.set(2, 1, 1);
+        b.set(2, 2, 1);
+        */
+
         for (int i = 0; i < 10; i++) {
             board.display();
-            board.initialize();
             board.nextGeneration();
+            System.out.println("");
         }
     }
 }
