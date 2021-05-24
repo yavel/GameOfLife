@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 class BoardTest {
     @Test
     public void testCountNeighborsEmptyBoard() {
-        Board b = new Board(3,3);
+        Board b = new Board(3,3, null);
         b.set(0,0, 0);
         b.set(0, 1, 0);
         b.set(0, 2, 0);
@@ -25,7 +25,7 @@ class BoardTest {
 
     @Test
     public void testCountNeighborsFullBoard() {
-        Board b = new Board(3,3);
+        Board b = new Board(3,3, null);
         b.set(0,0, 1);
         b.set(0, 1, 1);
         b.set(0, 2, 1);

@@ -17,12 +17,14 @@ public class Board {
     private int rows;
     private int cols;
     private int[][] b;
+    private BoardDisplay display;
 
     // creates a new board
-    public Board(int rows, int cols) {
+    public Board(int rows, int cols, BoardDisplay display) {
         this.rows = rows;
         this.cols = cols;
         this.b = new int[rows][cols];
+        this.display = display;
     }
     
     public void initialize() {
@@ -38,12 +40,14 @@ public class Board {
 
     // next need to display board
     public void display() {
+        display.clearCells();
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 if (b[r][c] == 0) {
                     System.out.print("-");
                 } else if (b[r][c] == 1) {
                     System.out.print("1");
+                    display.fillCell(r, c);
                 }
             }
             System.out.println();
@@ -63,7 +67,7 @@ public class Board {
 
     //next need to find the next generation by looking at the cells around the main cell
     public void nextGeneration() {
-        Board futureBoard = new Board(rows, cols);
+        Board futureBoard = new Board(rows, cols, null);
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 int count = countNeighbors(r,c);
@@ -137,7 +141,10 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board board = new Board(5, 5);
+        BoardDisplay display = new BoardDisplay(40, 40);
+        display.initialize();
+
+        Board board = new Board(40, 40, display);
         board.initialize();
        /* Board b = new Board(3,3);
         b.set(0,0, 1);
@@ -153,10 +160,14 @@ public class Board {
         b.set(2, 2, 1);
         */
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             board.display();
             board.nextGeneration();
             System.out.println("");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 }
